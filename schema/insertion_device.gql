@@ -1,0 +1,47 @@
+enum insertion_device_type{
+    UNDULATOR
+    WIGGLER
+}
+
+enum LENGTH_UNIT {
+    METRE
+    MILLIMETRE
+    MICROMETRE
+}
+
+enum ANGLE_UNIT {
+    RADIAN
+}
+
+type length_float {
+    value: float!,
+    units: LENGTH_UNIT!
+}
+
+type angle_float {
+    value: float!
+    unit: ANGLE_UNIT!
+}
+
+type insertion_device {
+    default: str,
+    type: insertion_device_type,
+    gap: length_float,
+    taper: angle_float,
+    phase: angle_float, 
+    poles: int,
+    magnetic_wavelength: float_with_units(value, NX_WAVELENGTH),
+    k: float,
+    length: length_float,
+    power: float_with_units(value, NX_POWER),
+    energy: float_with_units(value, NX_ENERGY),
+    bandwidth: float_with_units(value, NX_ENERGY),
+    harmonic: int,
+    depends_on: str,
+
+    spectrum: NXdata,
+    
+    OFF_GEOMETRY: NXoff_geometry,
+    TRANSFORMATIONS: NXtransformations,
+
+}
