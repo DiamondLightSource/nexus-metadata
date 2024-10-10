@@ -1,11 +1,16 @@
 #![forbid(unsafe_code)]
 
+pub mod db;
+
+use std::path::Path;
+
 use async_graphql::http::GraphiQLSource;
 use async_graphql::{EmptyMutation, EmptySubscription, Object, Schema};
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::response::Html;
 use axum::routing::get;
 use axum::{extract::Extension, response::IntoResponse, routing::post, Router};
+use db::DbService;
 
 struct Query;
 
@@ -31,6 +36,9 @@ async fn main() {
     let listener = tokio::net::TcpListener::bind("127.0.0.1:8000")
         .await
         .unwrap();
+
+    let db_path = Path::new("sqlite://demo.db");
+    DbService::connect(&db_path).await.unwrap();
 
     axum::serve(listener, app).await.unwrap();
 }
