@@ -1,0 +1,35 @@
+CREATE TABLE devices (
+    beamline TEXT NOT NULL,
+    device_name TEXT NOT NULL,
+    uuid INTEGER NOT NULL,
+    PRIMARY KEY (beamline, device_name)
+);
+
+-- NXinsertion_device
+/* https://manual.nexusformat.org/classes/base_classes/NXinsertion_device.html#nxinsertion-device */
+CREATE TABLE IF NOT EXISTS insertion_device (
+    uuid INTEGER PRIMARY KEY AUTOINCREMENT,
+    type CHAR,
+    gap FLOAT,
+    taper FLOAT,
+    phase FLOAT,
+    poles INTEGER,
+    magnetic_wavelength FLOAT,
+    k FLOAT,
+    length REAL,
+    power FLOAT,
+    energy FLOAT,
+    bandwidth FLOAT,
+    harmonic INT,
+    depends_on CHAR
+    -- spectrum NXdata,
+    -- OFF_GEOMETRY NXoff_geometry,
+    -- TRANSFORMATIONS NXtransformations,
+);
+
+
+-- -- Test Data
+-- INSERT INTO insertion_device (poles, length) VALUES (80,2.0);
+
+-- uuid = last_insert_rowid();
+-- INSERT INTO devices (beamline, device_name, uuid) VALUES ('i22', 'undulator', uuid)
