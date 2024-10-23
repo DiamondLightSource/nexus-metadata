@@ -1,4 +1,4 @@
-CREATE TABLE devices (
+CREATE TABLE IF NOT EXISTS devices (
     beamline TEXT NOT NULL,
     device_name TEXT NOT NULL,
     uuid INTEGER NOT NULL,
@@ -27,9 +27,8 @@ CREATE TABLE IF NOT EXISTS insertion_device (
     -- TRANSFORMATIONS NXtransformations,
 );
 
-
--- -- Test Data
--- INSERT INTO insertion_device (poles, length) VALUES (80,2.0);
+-- Test Data
+INSERT INTO insertion_device (poles, length) VALUES (30,2.0), (4,3.0);
 
 -- uuid = last_insert_rowid();
 -- INSERT INTO devices (beamline, device_name, uuid) VALUES ('i22', 'undulator', uuid)
