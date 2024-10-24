@@ -28,16 +28,8 @@ async fn main() {
         println!("Database already exists");
     }
 
-    let db = SqlitePool::connect(DB_URL).await.unwrap();
-
-    let create_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
-    let migrations = std::path::Path::new(&create_dir).join("./migrations");
-
-    let migration_results = sqlx::migrate::Migrator::new(migrations)
-        .await
-        .unwrap()
-        .run(&db)
-        .await;
+    let pool = SqlitePool::connect(DB_URL).await.unwrap();
+    let migration_results = sqlx::migrate!().run(&pool).await;
 
     match migration_results {
         Ok(_) => println!("Migration success"),
@@ -49,7 +41,7 @@ async fn main() {
 
     let ins_results =
         sqlx::query_as::<_, InsertionDevice>("SELECT uuid, poles, length from insertion_device")
-            .fetch_all(&db)
+            .fetch_all(&pool)
             .await
             .unwrap();
 
@@ -61,7 +53,7 @@ async fn main() {
     }
 
     let device_results = sqlx::query_as::<_, Device>("SELECT * from devices")
-        .fetch_all(&db)
+        .fetch_all(&pool)
         .await
         .unwrap();
 
