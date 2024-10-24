@@ -9,6 +9,13 @@ struct InsertionDevice {
     length: f64,
 }
 
+#[derive(Clone, FromRow, Debug)]
+struct Device {
+    beamline: String,
+    device_name: String,
+    uuid: i64,
+}
+
 #[tokio::main]
 async fn main() {
     if !Sqlite::database_exists(DB_URL).await.unwrap_or(false) {
@@ -46,10 +53,22 @@ async fn main() {
             .await
             .unwrap();
 
-    for device in ins_results {
+    for ins in ins_results {
         println!(
             "uuid: {}, poles: {}, length: {}",
-            device.uuid, device.poles, device.length
+            ins.uuid, ins.poles, ins.length
+        );
+    }
+
+    let device_results = sqlx::query_as::<_, Device>("SELECT * from devices")
+        .fetch_all(&db)
+        .await
+        .unwrap();
+
+    for device in device_results {
+        println!(
+            "beamline: {}, device_name: {}, uuid: {}",
+            device.beamline, device.device_name, device.uuid
         );
     }
 }
