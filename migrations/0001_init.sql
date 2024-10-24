@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS devices (
+CREATE TABLE devices (
     beamline TEXT NOT NULL,
     device_name TEXT NOT NULL,
     uuid INTEGER NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS devices (
 
 -- NXinsertion_device
 /* https://manual.nexusformat.org/classes/base_classes/NXinsertion_device.html#nxinsertion-device */
-CREATE TABLE IF NOT EXISTS insertion_device (
+CREATE TABLE insertion_device (
     uuid INTEGER PRIMARY KEY AUTOINCREMENT,
     type CHAR,
     gap FLOAT,
@@ -29,6 +29,4 @@ CREATE TABLE IF NOT EXISTS insertion_device (
 
 -- Test Data
 INSERT INTO insertion_device (poles, length) VALUES (30,2.0), (4,3.0);
-
--- uuid = last_insert_rowid();
--- INSERT INTO devices (beamline, device_name, uuid) VALUES ('i22', 'undulator', uuid)
+INSERT INTO devices (beamline, device_name, uuid) VALUES ('i22', 'undulator', 1)
