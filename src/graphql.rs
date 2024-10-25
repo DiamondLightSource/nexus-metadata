@@ -37,20 +37,20 @@ type Energy = f64;
 
 #[derive(SimpleObject)]
 pub struct NxInsertionDevice {
-    default: String,
-    id_type: InsertionDeviceType, // TODO: Figure out how to alias this
-    gap: Length,
-    taper: Angle,
-    phase: Angle,
-    poles: i32,
-    magnetic_wavelength: Length,
-    k: f64,
-    length: Length,
-    power: Power,
-    energy: Energy,
-    bandwidth: Energy,
-    harmonic: i32,
-    depends_on: String,
+    default: Option<String>,
+    id_type: Option<InsertionDeviceType>, // TODO: Figure out how to alias this
+    gap: Option<Length>,
+    taper: Option<Angle>,
+    phase: Option<Angle>,
+    poles: Option<i32>,
+    magnetic_wavelength: Option<Length>,
+    k: Option<f64>,
+    length: Option<Length>,
+    power: Option<Power>,
+    energy: Option<Energy>,
+    bandwidth: Option<Energy>,
+    harmonic: Option<i32>,
+    depends_on: Option<String>,
 }
 
 #[derive(SimpleObject)]
@@ -63,7 +63,25 @@ struct Query;
 #[Object]
 impl Query {
     async fn insertion_device(&self) -> Devices<NxInsertionDevice> {
-        Devices { devices: vec![] }
+        let device = NxInsertionDevice {
+            default: None,
+            id_type: None,
+            gap: None,
+            taper: None,
+            phase: None,
+            poles: Some(2),
+            magnetic_wavelength: None,
+            k: None,
+            length: Some(4.0),
+            power: None,
+            energy: None,
+            bandwidth: None,
+            harmonic: None,
+            depends_on: None,
+        };
+        Devices {
+            devices: vec![device],
+        }
     }
     async fn hello_foo(&self, foo: String) -> String {
         format!("hello {foo}")
