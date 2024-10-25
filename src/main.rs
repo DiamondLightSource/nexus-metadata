@@ -4,6 +4,10 @@ const DB_PATH: &str = "sqlite://sqlite.db";
 
 #[tokio::main]
 async fn main() {
+    //let args = Cli::init();
+
+    //match args.command {}
+
     let db_service = sqlite_db::SqliteService::connect(DB_PATH).await.unwrap();
 
     // get the insertion devices from the db

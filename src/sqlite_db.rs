@@ -1,4 +1,4 @@
-use sqlx::{migrate::MigrateDatabase, FromRow, Sqlite, SqlitePool};
+use sqlx::{sqlite::SqliteConnectOptions, FromRow, SqlitePool};
 
 #[derive(Clone, FromRow, Debug)]
 pub struct InsertionDevice {
@@ -18,18 +18,12 @@ pub struct SqliteService {
     pool: SqlitePool,
 }
 impl SqliteService {
-    pub async fn connect(filename: &str) -> Result<Self, sqlx::Error> {
-        if !Sqlite::database_exists(filename).await.unwrap_or(false) {
-            println!("Creating database {}", filename);
-            match Sqlite::create_database(filename).await {
-                Ok(_) => println!("Created db"),
-                Err(error) => panic!("error: {}", error),
-            }
-        } else {
-            println!("Database already exists");
-        }
-
-        let pool = SqlitePool::connect(filename).await.unwrap();
+    pub async fn connect(path: &str) -> Result<Self, sqlx::Error> {
+        println!("Connecting to SQLite database");
+        let options = SqliteConnectOptions::new()
+            .create_if_missing(true)
+            .filename(path);
+        let pool = SqlitePool::connect_with(options).await.unwrap();
         sqlx::migrate!().run(&pool).await?;
         Ok(Self { pool })
     }
