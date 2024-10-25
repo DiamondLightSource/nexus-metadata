@@ -38,7 +38,7 @@ type Energy = f64;
 #[derive(SimpleObject)]
 pub struct NxInsertionDevice {
     default: Option<String>,
-    id_type: Option<InsertionDeviceType>, // TODO: Figure out how to alias this
+    r#type: Option<InsertionDeviceType>,
     gap: Option<Length>,
     taper: Option<Angle>,
     phase: Option<Angle>,
@@ -65,7 +65,7 @@ impl Query {
     async fn insertion_device(&self) -> Devices<NxInsertionDevice> {
         let device = NxInsertionDevice {
             default: None,
-            id_type: None,
+            r#type: None,
             gap: None,
             taper: None,
             phase: None,
