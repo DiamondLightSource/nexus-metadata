@@ -1,5 +1,7 @@
 use async_graphql::http::GraphiQLSource;
-use async_graphql::{EmptyMutation, EmptySubscription, Object, Schema};
+use async_graphql::{
+    EmptyMutation, EmptySubscription, Enum, Object, OutputType, Schema, SimpleObject,
+};
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::response::Html;
 use axum::routing::get;
@@ -20,12 +22,48 @@ pub async fn serve_graphql() -> () {
     axum::serve(listener, app).await.unwrap();
 }
 
+// NeXus definitions
+
+#[derive(Enum, Copy, Clone, Eq, PartialEq)]
+pub enum InsertionDeviceType {
+    Undulator,
+    Wiggler,
+}
+
+type Length = f64;
+type Angle = f64;
+type Power = f64;
+type Energy = f64;
+
+#[derive(SimpleObject)]
+pub struct NxInsertionDevice {
+    default: String,
+    id_type: InsertionDeviceType, // TODO: Figure out how to alias this
+    gap: Length,
+    taper: Angle,
+    phase: Angle,
+    poles: i32,
+    magnetic_wavelength: Length,
+    k: f64,
+    length: Length,
+    power: Power,
+    energy: Energy,
+    bandwidth: Energy,
+    harmonic: i32,
+    depends_on: String,
+}
+
+#[derive(SimpleObject)]
+pub struct Devices<T: OutputType> {
+    devices: Vec<T>,
+}
+
 struct Query;
 
 #[Object]
 impl Query {
-    async fn hello(&self) -> &'static str {
-        "hello"
+    async fn insertion_device(&self) -> Devices<NxInsertionDevice> {
+        Devices { devices: vec![] }
     }
     async fn hello_foo(&self, foo: String) -> String {
         format!("hello {foo}")
