@@ -1,2 +1,5 @@
 # Rust Builds
 /target
+
+# Demo database
+sqlite.db
